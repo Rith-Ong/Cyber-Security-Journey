@@ -1,0 +1,84 @@
+Let's make your Ubuntu-Server VM actually do something, and then access it from your Client-PC. This will confirm that your internal network is fully functional at the application layer and provide a target for future security testing.
+
+Project 2: Deploy a Web Server and Test Connectivity
+Goal: Install the Apache web server on your Ubuntu-Server VM and then access the default Apache webpage from your Client-PC VM, demonstrating application-layer communication across your virtual network.
+
+Why this project?
+- Confirms Application Connectivity: Verifies that network layers beyond basic ping are working correctly through your pfSense firewall.
+- Sets up a Target: Creates a simple web application target that you can later use for vulnerability scanning, web application penetration testing, or log analysis.
+- Basic Server Administration: Introduces fundamental server package installation and service management on Linux.
+
+Step 1: Install Apache Web Server on Ubuntu-Server VM
+Apache HTTP Server is the most widely used web server software in the world. It's easy to install and a great starting point.
+
+Start your Ubuntu-Server VM:
+- If it's not already running, open VMware Workstation Player, select Ubuntu-Server, and click Play virtual machine.
+- Log in:
+- Log in to your Ubuntu-Server VM with the username and password you set during installation.
+
+Update Package Lists:
+- It's good practice to update the package lists before installing new software. In the terminal, type: sudo apt update
+- Enter your password when prompted.
+- Install Apache:
+- Now, install the Apache web server package: sudo apt install apache2 -y
+- The -y flag automatically confirms any prompts during the installation.
+
+Verify Apache Status:
+- Once the installation finishes, Apache should automatically start. You can verify its status: sudo systemctl status apache2
+- You should see active (running) in green text. Press q to exit the status view.
+- Find your Ubuntu Server's IP Address:
+- You should already have this noted from the previous project, but let's reconfirm it.
+- type ip a
+- Look for the inet address next to your network interface (e.g., enp0s3). It should be in the 192.168.1.x range (or whatever LAN subnet pfSense is using). Note this IP address down carefully.
+
+Action:
+- Start and log into your Ubuntu-Server VM.
+- Run sudo apt update to update package lists.
+- Run sudo apt install apache2 -y to install Apache.
+- Verify Apache is active (running) with sudo systemctl status apache2.
+- Confirm your Ubuntu-Server's IP address using ip a and note it down.
+- Once you've completed these steps and confirmed Apache is running and you have the server's IP address, let me know, and we'll move on to Step 2: Access the Web Server from the Client PC.
+________________________________________
+
+Step 2: Access the Web Server from the Client PC
+
+Now, let's verify that your Client-PC can communicate with your Ubuntu-Server at the application layer by accessing the default Apache webpage.
+
+Start your Client-PC VM:
+- If it's not already running, open VMware Workstation Player, select Client-PC, and click Play virtual machine.
+- Log in:
+- Log in to your Client-PC VM with your username and password.
+- Open a Web Browser:
+- Once logged in, open the default web browser (e.g., Edge/Chrome on Windows, Firefox on Ubuntu Desktop).
+- Navigate to the Server's IP Address:
+- In the browser's address bar, type the IP address of your Ubuntu-Server that you noted down in the previous step (e.g., http://192.168.1.10).
+- Press Enter.
+
+Expected Outcome:
+- You should see the default Apache "Ubuntu" welcome page, which typically says "Apache2 Ubuntu Default Page" or something similar. This page confirms that your Client-PC successfully connected to the Ubuntu-Server and that the web server is serving content.
+
+
+________________________________________
+
+Troubleshooting (If it doesn't work):
+
+If you don't see the Apache default page, here are some common things to check:
+
+- Is Ubuntu-Server Running?
+- Go back to your Ubuntu-Server VM in VMware. Is it powered on?
+- Is Apache Running on Ubuntu-Server?
+- Log in to your Ubuntu-Server VM.
+- Run sudo systemctl status apache2. Make sure it still shows active (running). If not, try sudo systemctl start apache2.
+- Correct IP Address for Ubuntu-Server?
+- On Ubuntu-Server VM, run ip a again to confirm the IP address. Double-check that you are typing the correct IP into your Client-PC's browser.
+- Client-PC Network?
+- On Client-PC VM, open Command Prompt (Windows) or Terminal (Ubuntu Desktop).
+- Run ipconfig (Windows) or ip a (Ubuntu). Confirm the Client-PC has an IP address in the same subnet as your Ubuntu-Server and that its Default Gateway is your pfSense LAN IP.
+- Try pinging your Ubuntu-Server's IP address from the Client-PC. If ping fails, there's a more fundamental network connectivity issue between them, likely related to your VMnet1 setup or pfSense.
+
+Action:
+- Start and log into your Client-PC VM.
+- Open a web browser and navigate to the IP address of your Ubuntu-Server.
+- Confirm you see the Apache default page.
+- If you encounter issues, go through the troubleshooting steps above.
+- Once you've successfully accessed the Apache page from your Client-PC, let me know! This project will then be complete, and we can discuss what you've achieved and what's next.
