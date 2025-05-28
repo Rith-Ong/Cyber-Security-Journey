@@ -1,0 +1,543 @@
+This project will teach you about network architecture, virtualization, and basic security controls. It's a fantastic starting point because it allows you to experiment in a safe, isolated environment.
+
+Step 1: Set Up a Virtual Network Lab
+
+Create a virtualized network environment with multiple operating systems to simulate a small corporate network. This will include a firewall, a client machine, and a server machine.
+
+Why this project?
+•	Safe Environment: You can break things without affecting your main computer.
+•	Hands-on Networking: Understand how different network components interact.
+•	Foundation for Future Projects: This lab will be your playground for more advanced cybersecurity exercises (e.g., vulnerability scanning, malware analysis, SIEM deployment).
+
+
+Step 2: Choose Your Virtualization Software
+You'll need a program to create and run virtual machines (VMs).
+
+•	Option A: VirtualBox (Recommended for Beginners) 
+-	Pros: Free, open-source, excellent community support, available on Windows, macOS, and Linux.
+-	Cons: Can be slightly less performant than commercial alternatives on some systems.
+
+•	Option B: VMware Workstation Player (Windows/Linux) or VMware Fusion (macOS) 
+-	Pros: Generally good performance, widely used in professional environments.
+-	Cons: Workstation Player is free for personal use, but Workstation Pro (more features) and Fusion are paid.
+
+•	Option C: Hyper-V (Built-in to Windows Pro/Enterprise) 
+- Pros: Native to Windows, good performance.
+- Cons: Only on Windows Pro/Enterprise, can be less intuitive for beginners.
+
+Action:
+1.	Decide on your virtualization software.
+2.	Download and install it. 
+
+-	For VirtualBox: Go to https://www.virtualbox.org/wiki/Downloads and download the appropriate package for your operating system. Follow the installation instructions.
+
+-	For VMware Workstation Player: Go to https://www.vmware.com/products/workstation-player/workstation-player-evaluation.html and download it.
+
+For this project, I chose VMware Workstation Pro.  
+________________________________________
+Step 3: Set Up a Virtual Network Lab (Continued)
+
+Now that we have VMware Workstation Player installed, let's get the operating systems (OS) you'll need for your virtual lab. We'll set up three main components:
+1.	Firewall/Router (pfSense): This will control traffic between different parts of your virtual network and the internet.
+2.	Client Machine (Windows or Linux Desktop): This simulates a user's computer within your network.
+3.	Server Machine (Linux Server - e.g., Ubuntu Server): This simulates an internal server, like a web server or file server.
+________________________________________   
+Step 4: Download Operating System ISOs
+
+You'll need "ISO" files for each operating system. Think of an ISO file as a digital version of an installation CD/DVD.
+
+4.1. Download pfSense (Firewall)
+pfSense is a powerful, open-source firewall distribution based on FreeBSD. It's fantastic for learning network security concepts.
+1.	Go to the official pfSense download page: https://www.pfsense.org/download/
+2.	Select the following options: 
+      -	Architecture: AMD64 (64-bit)
+      -	Installer: Netgate ADI (ISO Installer)
+      -	Version: Choose the latest stable release (e.g., 2.7.x).
+3.	Click the "Download" button. This ISO file is relatively small.
+________________________________________
+4.2. Download a Client OS (Windows 10/11 or Ubuntu Desktop)
+Option A: Windows 10/11 (Recommended for realism in a corporate setup)
+•	You'll need a legitimate Windows license to activate it long-term, but you can usually run it unactivated for a while for learning purposes.
+•	Go to the Microsoft Windows 10 or 11 download page: 
+    -	Windows 11: https://www.microsoft.com/software-download/windows11 (Select "Download Windows 11 Disk Image (ISO) for x64 devices")
+    -	Windows 10: https://www.microsoft.com/software-download/windows10 (Select "Download tool now" to get the Media Creation Tool, which you can use to create an ISO).
+•	Download the appropriate ISO file.
+________________________________________
+Option B: Ubuntu Desktop (Free and excellent for learning)
+•	A great alternative if you don't have a Windows license or prefer a Linux desktop environment.
+•	Go to the Ubuntu Desktop download page: https://ubuntu.com/download/desktop
+•	Choose the latest LTS (Long Term Support) version (e.g., 22.04 LTS). This ensures stability and long-term updates.
+•	Click the "Download" button.
+Choose ONE client OS.
+________________________________________
+4.3. Download a Server OS (Ubuntu Server)
+Ubuntu Server is a popular choice for virtual labs due to its ease of use and good community support.
+1.	Go to the Ubuntu Server download page: https://ubuntu.com/download/server
+2.	Choose the latest LTS (Long Term Support) version (e.g., 22.04 LTS).
+3.	Click the "Download" button.
+________________________________________
+Action:
+1.	Download the ISO for pfSense.
+2.	Download the ISO for your chosen Client OS (Windows 10/11 or Ubuntu Desktop).
+3.	Download the ISO for Ubuntu Server.
+
+Once all three ISO files have finished downloading, we'll proceed to Step 5: Create the Virtual Machines in VMware Workstation Player.
+________________________________________
+
+Now that you have all the ISOs, we can start creating the virtual machines themselves in VMware Workstation Player.
+
+This step involves setting up the "hardware" for each virtual machine (CPU, RAM, hard disk) and telling VMware where to find the ISO file for installation. We'll start with the firewall, as it will be the central point of your network.
+
+Step 5: Set Up a Virtual Network Lab (Continued)
+Step 5.1: Create the Virtual Machines (VMs) in VMware Workstation Player
+
+We will create three separate virtual machines:
+1.	pfSense Firewall VM
+2.	Client OS VM (Windows and Ubuntu Desktop)
+3.	Ubuntu Server VM
+________________________________________
+
+6. Create the pfSense Firewall VM
+
+pfSense needs special network configuration because it acts as a router/firewall between different network segments.
+1.	Open VMware Workstation Player.
+2.	Click on "Create a New Virtual Machine" from the Home screen or Player > File > New Virtual Machine....
+3.	Installer Disc Image file (ISO): 
+  -	Select "Installer disc image file (iso):"
+  -	Click "Browse..." and navigate to where you saved the pfSense-CE-*.iso file.
+  -	Click "Next".
+  -	VMware might say it can't detect the OS; that's fine for pfSense.
+
+4. Guest Operating System: 
+  -	Select "Other".
+  -	For "Version," select FreeBSD 64-bit.
+  -	Click "Next".
+
+5.	Name the Virtual Machine: 
+  -	"Virtual machine name:" Type pfSense-Firewall
+  -	"Location:" Choose a location on your hard drive where you have enough space. (e.g., C:\VMs\pfSense-Firewall).
+  -	Click "Next".
+
+6.	Specify Disk Capacity: 
+  -	"Maximum disk size (GB):" Enter 20 (20 GB is more than enough for pfSense).
+  -	Select "Store virtual disk as a single file" (generally better performance).
+  -	Click "Next".
+
+7.	Customize Hardware (Crucial for pfSense!): 
+  -	Click "Customize Hardware..."
+  -	Memory: Set to 1024 MB (1 GB). pfSense doesn't need much.
+  -	Processors: Set to 1 or 2 (1 is usually sufficient).
+  -	Network Adapter (NAT): 
+      -	Click "Network Adapter".
+      -	Select "NAT" (This will be your pfSense's WAN/Internet interface).
+      -	Click "Add..."
+      -	Select "Network Adapter" and click "Finish".
+
+      -	Network Adapter 2 (Custom: Host-only): 
+      -	For the newly added Network Adapter, select "Custom: Specific virtual network".
+      -	From the dropdown, choose "VMnet1 (Host-only)". This will be your pfSense's LAN interface, allowing your VMs to communicate with each other but not directly with the internet.
+      -	Click "Add..."
+      -	Select "Network Adapter" and click "Finish".
+
+      -	Network Adapter 3 (Custom: VMnet2 - New Network): 
+      -	For this third newly added Network Adapter, select "Custom: Specific virtual network".
+      -	From the dropdown, choose "VMnet2 (Host-only)" if it exists, otherwise choose a new VMnet you will create.
+      -	Important: If VMnet2 doesn't exist, we need to create it. We'll set this up to be an isolated network segment where only your VMs can talk to each other through the firewall. 
+      -	Click "Add..." -> "Network Adapter" -> "Finish".
+      -	Select this new adapter.
+      -	Change "Network connection" to "Custom: Specific virtual network".
+      -	Crucially, select VMnet2 (Host-only). If VMnet2 isn't an option, you'll need to go to Edit > Virtual Network Editor... in VMware Workstation Player, click "Change Settings", then "Add Network..." and create a new Host-only network called VMnet2. Make sure DHCP is unchecked for VMnet1 and VMnet2 within the Virtual Network Editor if you manually add them, as pfSense will handle DHCP.
+
+-	Remove unnecessary devices: You can remove "USB Controller", "Sound Card", and "Printer" if you wish, as they aren't needed for a firewall.
+-	Click "Close" on the Hardware window.
+
+8. Ready to Create Virtual Machine: 
+-	Click "Finish".
+
+You now have an empty pfSense VM created with its virtual hardware configured.
+________________________________________
+
+Next, we'll configure VMware's Virtual Network Editor (if you haven't already and to verify settings).
+
+Step 7: Configure VMware's Virtual Network Editor
+
+Action:
+1.	Go to Edit > Virtual Network Editor... in VMware Workstation Player.
+2.	Click "Change Settings" (if prompted by UAC).
+3.	Review or configure the following:
+
+  -	VMnet0 (Bridged): Typically exists and is fine as default (connects VM directly to external network). We won't directly use this for the VMs inside the lab.
+
+  -	VMnet1 (Host-only): 
+      -	Should have "Host-only" selected.
+      -	Make sure "Connect a host virtual adapter to this network" is checked.
+      -	UNCHECK "Use local DHCP service to distribute IP addresses to VMs." (pfSense will handle DHCP for this network).
+      -	Note the subnet it's using (e.g., 192.168.x.0).
+
+    -	VMnet8 (NAT): 
+      -	Should have "NAT" selected.
+      -	"Connect a host virtual adapter to this network" should be checked.
+      -	"Use local DHCP service to distribute IP addresses to VMs." should be checked (VMware's DHCP will assign an IP to pfSense's WAN interface).
+
+    -	VMnet2 (Host-only - for your LAN): 
+      -	If you don't see VMnet2, click "Add Network..." and select "VMnet2".
+      -	Select "Host-only".
+      -	Crucially, make sure "Connect a host virtual adapter to this network" is checked.
+      -	UNCHECK "Use local DHCP service to distribute IP addresses to VMs." (pfSense will handle DHCP for this network).
+      -	You can set its subnet now (e.g., 192.168.1.0/24 or 10.0.1.0/24). Make sure it's a different subnet than VMnet1 if VMnet1 is also host-only.
+
+-	We'll use VMnet1 for your secure internal network (LAN where Client and Server will reside) and VMnet8 (NAT) for your pfSense WAN. We will not need a separate VMnet2 for this basic setup. The ideal setup for a basic lab will be:
+    -	pfSense WAN: Connected to VMnet8 (NAT) (gets internet access from your host, and VMware handles DHCP for this interface).
+    -	pfSense LAN: Connected to VMnet1 (Host-only) (this is where your client and server VMs will reside. pfSense will handle DHCP here).
+
+-	Revisit Network Adapter settings for pfSense:
+  -	Go back to your pfSense-Firewall VM settings (Player > Manage > Virtual Machine Settings).
+  -	Network Adapter: Should be NAT (VMnet8).
+  -	Network Adapter 2: Should be Custom: VMnet1 (Host-only).
+  -	Remove Network Adapter 3 if you added it (the one you set to VMnet2). Just click it and click "Remove".
+
+4.	Click "OK" to close the Virtual Network Editor.
+________________________________________
+
+Once you have created the pfSense VM and configured its network adapters as described (one NAT, one Custom: VMnet1 Host-only), and ensured VMnet1 has DHCP unchecked in the Virtual Network Editor, we'll move on to creating the Client and Server VMs.
+
+Step 8: Set Up a Virtual Network Lab (Continued)
+
+Now that your pfSense firewall is set up, let's create the other two critical components of your network: the client machine and the server machine. These will be much simpler to set up than pfSense, as they will both connect to the internal network segment (VMnet1) that pfSense will manage.
+
+Step 8.1: Create the Virtual Machines (VMs) in VMware Workstation Player (Continued)
+
+Step: 8.2. Create the Client OS VM (Windows or Ubuntu Desktop)
+
+This VM will represent a typical user's workstation within your simulated corporate network.
+1.	Open VMware Workstation Player.
+2.	Click on "Create a New Virtual Machine" from the Home screen or Player > File > New Virtual Machine....
+3.	Installer Disc Image file (ISO): 
+    -	Select "Installer disc image file (iso):"
+    -	Click "Browse..." and navigate to where you saved your Client OS ISO (either Windows 10/11 or Ubuntu Desktop).
+    -	Click "Next".
+    -	VMware Workstation Player should detect the operating system (e.g., "Windows 10 x64" or "Ubuntu 64-bit"). If it doesn't, select "I will install the operating system later" and you'll manually attach the ISO after creation.
+
+4.	Easy Install Information (if detected): 
+    -	If VMware detected your OS, it might ask for a product key, full name, and password. You can fill these in if you wish, or leave them blank (especially for Windows, if you plan to activate later).
+    -	Click "Next".
+
+5.	Name the Virtual Machine: 
+    -	"Virtual machine name:" Type Client-PC (or Windows-Client / Ubuntu-Client).
+    -	"Location:" Choose a suitable location on your hard drive.
+    -	Click "Next".
+
+6.	Specify Disk Capacity: 
+    -	"Maximum disk size (GB):" 
+    -	For Windows 10/11: 60 GB is a good minimum.
+    -	For Ubuntu Desktop: 30 GB is usually sufficient.
+    -	Select "Store virtual disk as a single file".
+    -	Click "Next".
+
+7.	Customize Hardware: 
+    -	Click "Customize Hardware..."
+    -	Memory: 
+    -	For Windows 10/11: At least 4096 MB (4 GB) is recommended for smooth operation. More is better if your host has it.
+    -	For Ubuntu Desktop: At least 2048 MB (2 GB).
+    -	Processors: Set to 2.
+    -	Network Adapter: 
+    -	Click "Network Adapter".
+    -	Select "Custom: Specific virtual network".
+    -	From the dropdown, choose "VMnet1 (Host-only)". This is crucial, as this VM needs to be on the same internal network segment as your pfSense LAN interface.
+    -	Remove unnecessary devices: You can remove "Floppy", "USB Controller", "Sound Card", and "Printer" if you wish, as they aren't strictly needed for a lab environment.
+    -	Click "Close" on the Hardware window.
+
+8.	Ready to Create Virtual Machine: 
+  -	Click "Finish".
+________________________________________
+
+Step 9: Create the Ubuntu Server VM
+
+This VM will act as an internal server. We'll install a basic web server (Apache) later as an example.
+1.	Open VMware Workstation Player.
+2.	Click on "Create a New Virtual Machine".
+3.	Installer Disc Image file (ISO): 
+    -	Select "Installer disc image file (iso):"
+    -	Click "Browse..." and navigate to where you saved the ubuntu-server-*.iso file.
+    -	Click "Next".
+    -	VMware Workstation Player should detect "Ubuntu 64-bit".
+
+4. Easy Install Information (if detected): 
+    -	Enter a Full Name, User name, and Password. Remember these credentials!
+    -	Click "Next".
+
+5.	Name the Virtual Machine: 
+    -	"Virtual machine name:" Type Ubuntu-Server
+    -	"Location:" Choose a suitable location on your hard drive.
+    -	Click "Next".
+
+6.	Specify Disk Capacity: 
+    -	"Maximum disk size (GB):" Enter 20 GB. This is ample for a basic server.
+    -	Select "Store virtual disk as a single file".
+    -	Click "Next".
+
+7.	Customize Hardware: 
+    -	Click "Customize Hardware..."
+    -	Memory: Set to 1024 MB (1 GB) or 2048 MB (2 GB) if your host has enough RAM. Ubuntu Server is quite light.
+    -	Processors: Set to 1 or 2.
+    -	Network Adapter: 
+        -	Click "Network Adapter".
+        -	Select "Custom: Specific virtual network".
+        -	From the dropdown, choose "VMnet1 (Host-only)". Like the client, this server needs to be on your internal network managed by pfSense.
+    -	Remove unnecessary devices: You can remove "Floppy", "USB Controller", "Sound Card", and "Printer".
+    -	Click "Close" on the Hardware window.
+
+8.	Ready to Create Virtual Machine: 
+-	Click "Finish".
+
+Now comes the fun part: installing the operating systems themselves. We'll install them in a specific order to ensure your network functions correctly.
+________________________________________
+
+Step 10: Set Up a Virtual Network Lab (Continued)
+
+Step 10.1: Install Operating Systems
+
+The installation order is crucial for our lab setup:
+1.	Install pfSense: We need the firewall up and running first so it can provide network services (like DHCP) to the other VMs.
+2.	Install Ubuntu Server: Install the server next.
+3. Install Ubuntu Desktop: Install the Desktop next.
+4. Install Client OS: Install the client last.
+________________________________________
+
+10.2. Install pfSense Firewall
+1.	Start the pfSense VM: 
+    -	In VMware Workstation Player, select pfSense-Firewall from your list of virtual machines.
+    -	Click Play virtual machine.
+
+2.	Boot Process: 
+    -	You'll see text scrolling rapidly. Eventually, you'll reach the pfSense installer prompt.
+    -	At the welcome screen, press Enter to accept the default settings (usually Boot Multi User).
+
+3.	Installer Options: 
+    -	When prompted, select Accept these Settings.
+    -	Select Install.
+    -	Choose Auto (UFS) for the partitioning scheme. Press Enter.
+    -	Confirm OK to proceed with partitioning.
+    -	Select Standard Kernel.
+    - Select OK to begin the installation.
+
+4. Installation Progress: 
+    -	The installer will copy files. This is usually quick.
+
+5. Reboot: 
+    -	Once done, it will ask if you want to make any final modifications. Select No.
+    -	Select Reboot.
+
+6. Eject ISO: 
+    -	Crucially, after rebooting, while the VM is shutting down or just as it starts up again, quickly go to Player > Removable Devices > CD/DVD (SATA) > Disconnect or Settings... > CD/DVD (SATA) and uncheck "Connect at power on" and "Use ISO image file." This prevents the VM from booting back into the installer.
+    -	If it boots back into the installer, just power off the VM, disconnect the ISO, and power it on again.
+
+7. Initial Configuration on pfSense Console: 
+    -	After reboot, pfSense will boot into its console. You'll see a series of questions.
+    -	It will prompt: Set up VLANs now? [y/N] 
+    -	Type N and press Enter.
+    -	It will show you detected interfaces. You should see em0 and em1 (or similar, depending on virtual NIC types).
+    -	Assign WAN Interface: 
+    -	Enter the WAN interface name or 'a' for auto-detection (em0 or em1):
+    -	Type em0 (This will be your NAT interface, connecting to your host's internet). Press Enter.
+    -	Assign LAN Interface: 
+    -	Enter the LAN interface name or 'a' for auto-detection (em0 or em1):
+    -	Type em1 (This will be your Host-Only VMnet1 interface, where your client and server will connect). Press Enter.
+    -	Optional Interfaces: 
+    -	Enter the optional 1 interface name or 'a' for auto-detection (or nothing if finished):
+    -	Just press Enter (we don't have an optional interface).
+    -	Confirm Interfaces: 
+    -	You'll see a summary. Type y and press Enter.
+    -	pfSense will apply the changes and start services.
+    -	Once it's done, you'll see the main menu. Note the LAN IP address it assigned (e.g., 192.168.1.1 or 192.168.0.1). This is your firewall's internal IP address, and it will be your default gateway for the other VMs.
+________________________________________
+Action:
+1.	Install pfSense by following the steps above.
+2.	Crucially, disconnect the pfSense ISO after installation and before the final reboot.
+3.	Note down the LAN IP address that pfSense assigns to itself (e.g., 192.168.1.1). This is very important!
+________________________________________
+
+Step 11: Set Up a Virtual Network Lab (Continued)
+
+Step 11.1: Install Operating Systems (Continued)
+
+Now let's install the Ubuntu Server. It will automatically get an IP address from pfSense's DHCP server, demonstrating that your firewall is working.
+
+11.2. Install Ubuntu Server
+
+1. Start the Ubuntu Server VM: 
+    -	In VMware Workstation Player, select Ubuntu-Server from your list of virtual machines.
+    -	Click Play virtual machine.
+
+2. Boot from ISO: 
+    -	The VM should boot from the Ubuntu Server ISO. You'll see a menu. Choose Try or Install Ubuntu Server.
+
+3. Language and Keyboard: 
+    -	Select your preferred language (e.g., English).
+    -	Select your keyboard layout.
+
+4. Network Configuration: 
+    -	Crucially, it should attempt to configure the network using DHCP. If your pfSense firewall is running and its LAN interface (VMnet1) is correctly configured, the Ubuntu Server VM should automatically receive an IP address from pfSense.
+    -	Confirm the IP address shown is within the range pfSense is serving (e.g., if pfSense LAN is 192.168.1.1, the server might get 192.168.1.10 or similar). This is a good sign that your network is working!
+    -	Press Enter to continue.
+
+5. Proxy Address: 
+    -	Leave blank unless you have a specific proxy. Press Enter.
+
+6. Archive Mirror: 
+    -	Accept the default or choose one closer to you. Press Enter.
+
+7. Storage Configuration: 
+    -	Select Use an entire disk.
+    -	Confirm the disk selection (/dev/sda or similar).
+    -	Choose Done.
+    -	Review the summary. Select Done and confirm Continue to destroy existing data (it's a new virtual disk, so this is fine).
+
+8. Profile Setup: 
+    -	Your name: Enter your full name.
+    -	Your server's name: ubuntu-server (or lab-server).
+    -	Pick a username: yourusername (e.g., admin). Remember this username!
+    -	Choose a password: Remember this password!
+    -	Confirm Done.
+
+9. SSH Setup: 
+    -	Select Install OpenSSH server. This is highly recommended as it allows you to connect to your server remotely from your host machine (and eventually the client VM).
+    -	Press Enter.
+
+10.	Snap Installs (Optional): 
+    -	You can select additional snaps if you want (e.g., Docker, Nextcloud), but for now, just choose Done to continue.
+
+11.	Installation Progress: 
+    -	The system will now install. This might take a while depending on your computer's speed.
+
+12.	Reboot: 
+  -	Once the installation is complete, select Reboot Now.
+
+13.	Eject ISO: 
+    -	Similar to pfSense, after clicking Reboot Now, quickly go to Player > Removable Devices > CD/DVD (SATA) > Disconnect or Settings... > CD/DVD (SATA) and uncheck "Connect at power on" and "Use ISO image file." This prevents the VM from booting back into the installer.
+    -	If it boots into the installer, just power off, disconnect the ISO, and power on again.
+
+14. Login: 
+    -	After reboot, you should see a login prompt. Log in with the username and password you created earlier.
+________________________________________
+Action:
+1.	Install Ubuntu Server by following the steps above.
+2.	Confirm it receives an IP address during network configuration.
+3.	Disconnect the Ubuntu Server ISO after installation and before the final reboot.
+4.	Log in to your Ubuntu Server VM to confirm it's working.
+5.	(Optional but Recommended): Get the actual IP address of your Ubuntu Server. Once logged in, type: 
+Bash
+ip a
+________________________________________
+
+
+Step 12: Set Up a Virtual Network Lab (Continued)
+
+Step 12.1: Install Operating Systems (Continued)
+
+12.3. Install Client OS (Windows 10 and Ubuntu Desktop)
+This VM represents an end-user's machine, which will also receive its IP address from your pfSense firewall and use it as its default gateway.
+Choose the instructions that match the Client OS ISO you downloaded: 
+I chose to do both.
+________________________________________
+
+Option A: Install Windows 10 (if you chose this)
+1. Start the Client-PC VM: 
+    -	In VMware Workstation Player, select Client-PC (or Windows-Client) from your list of virtual machines.
+    -	Click Play virtual machine.
+
+2. Windows Installation: 
+    -	The VM should boot from the Windows ISO.
+    -	Follow the on-screen prompts for Windows installation: 
+    -	Select Language, Time, and Keyboard.
+    -	Click "Install now".
+    -	If prompted for a product key, you can often select "I don't have a product key" to proceed with unactivated installation for lab purposes.
+    -	Choose the edition of Windows you want to install (e.g., Windows 10 Pro).
+    -	Accept the license terms.
+    -	Select "Custom: Install Windows only (advanced)".
+    -	Select the unallocated space (your virtual hard disk, usually "Drive 0 Unallocated Space") and click "Next". Windows will create necessary partitions and begin installation.
+
+3. Setup Process (OOBE - Out-Of-Box Experience): 
+    -	Once the main installation finishes, Windows will reboot and go through the OOBE.
+    -	Follow the prompts: 
+    -	Region: Select your region.
+    -	Keyboard layout: Select your layout.
+    -	Network: It should automatically connect to your pfSense-managed network (VMnet1) and obtain an IP address via DHCP. If it asks to connect to a network, it should just find the connection.
+    -	How would you like to set up? Choose "Set up for personal use" or "Set up for an organization" (either is fine for a lab).
+    -	Sign in with Microsoft account: For a lab, you can usually select "Offline account" or "Skip for now" to create a local user. Then provide a username and password. Remember these credentials!
+    -	Go through privacy settings (you can usually decline most for a lab unless you want to test specific privacy features).
+    -	Decline Cortana, etc., if desired.
+
+4.	Desktop and Network Connectivity: 
+    -	Once the installation is complete, you should be greeted by the Windows desktop.
+    -	Verify Network: 
+    -	Open Command Prompt or PowerShell.
+    -	Type ipconfig and press Enter.
+    -	Look for the "IPv4 Address" for your Ethernet adapter. It should be in the same subnet as your pfSense LAN and Ubuntu Server (e.g., 192.168.1.x).
+    - Also, check the "Default Gateway" – it should be the IP address of your pfSense LAN interface (e.g., 192.168.1.1).
+    -	Try to ping your Ubuntu Server's IP address.
+    -	Try to open a web browser (e.g., Edge) and navigate to an external website (like google.com). This tests if your pfSense firewall is successfully routing traffic to the internet.
+
+5. Eject ISO: 
+    -	After installation, go to Player > Removable Devices > CD/DVD (SATA) > Disconnect or Settings... > CD/DVD (SATA) and uncheck "Connect at power on" and "Use ISO image file."
+________________________________________
+Option B: Install Ubuntu Desktop (if you chose this)
+1. Start the Client-PC VM: 
+    -	In VMware Workstation Player, select Client-PC (or Ubuntu-Client) from your list of virtual machines.
+    -	Click Play virtual machine.
+
+2. Ubuntu Installation: 
+    -	The VM should boot from the Ubuntu Desktop ISO.
+    -	Select your language.
+    -	Click "Install Ubuntu".
+    -	Keyboard Layout: Select your layout.
+    -	Updates and other software: Choose "Normal installation." You can uncheck "Download updates while installing Ubuntu" to speed it up.
+    -	Installation type: Select "Erase disk and install Ubuntu." Click "Install Now" and confirm "Continue".
+    -	Where are you? Select your time zone.
+    -	Who are you? 
+    -	Your name: Enter your full name.
+    -	Your computer's name: ubuntu-client (or client-pc).
+    -	Pick a username: yourusername (e.g., labuser). Remember this username!
+    -	Choose a password: Remember this password!
+    -	Select "Require my password to log in."
+    -	Click "Continue" to start the installation.
+
+3. Installation Progress: 
+    -	The installation will proceed, copying files and setting up the system. This can take some time.
+
+4. Reboot: 
+-	Once complete, you'll see a message: "Installation Complete. You need to restart the computer in order to use the new installation." Click "Restart Now".
+
+5.	Eject ISO: 
+  -	Crucially, after clicking "Restart Now," quickly go to Player > Removable Devices > CD/DVD (SATA) > Disconnect or Settings... > CD/DVD (SATA) and uncheck "Connect at power on" and "Use ISO image file." If you miss it, the VM might boot back into the installer; just power off, disconnect the ISO, and power on again.
+
+6. Login and Network Connectivity: 
+    -	After reboot, you should see the login screen. Log in with the username and password you created.
+    -	Verify Network: 
+    -	Open a Terminal (Ctrl+Alt+T).
+    -	Type ip a and press Enter.
+    -	Look for the inet address under the enp* interface. It should be in the same subnet as your pfSense LAN and Ubuntu Server.
+    -	Type ip r and press Enter. The default via address should be your pfSense LAN IP (e.g., 192.168.1.1).
+    -	Try to ping your Ubuntu Server's IP address.
+    -	Try to open the Firefox web browser and navigate to an external website (like google.com). This tests if your pfSense firewall is successfully routing traffic to the internet.
+________________________________________
+Action:
+1. Install your chosen Client OS (Windows or Ubuntu Desktop) following the specific steps above.
+2. Disconnect the Client OS ISO after installation and before the final reboot.
+3. Verify network connectivity from the Client OS VM: 
+    -	Check its IP address.
+    -	Confirm its default gateway is your pfSense LAN IP.
+    -	Test pinging your Ubuntu Server.
+    -	Test Browse to an external website.
+
+
+Once your Client OS is installed and you've confirmed its network connectivity, You will then have a fully functional virtual network lab!
+
+This lab now consists of:
+•	pfSense-Firewall: Acting as your network's router and firewall, managing traffic between your internal VMs and providing internet access.
+•	Ubuntu-Server: An internal server that can host services.
+•	Client-PC: A workstation mimicking an end-user's machine.
+
+All internal VMs (Ubuntu Server and Client PC) are communicating through your pfSense firewall, and pfSense is routing their internet traffic
+
+
