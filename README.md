@@ -1,1 +1,1 @@
-# Cyber-Security-Journey
+This repository contains a collection of cybersecurity projects I’ve worked on as part of my journey to transition into the field of cybersecurity. Each project is a hands-on exploration of key concepts, tools, and techniques used in real-world security operations. These projects reflect my growing understanding of security fundamentals and my commitment to building practical, job-ready skills through continuous learning and experimentation.# Cyber-Security-Journey
